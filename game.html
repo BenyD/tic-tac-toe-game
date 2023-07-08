@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tic Tac Toe</title>
+    <style>
+      /* ... CSS styles ... */
+      .win-animation {
+        animation: win 1s ease-in-out infinite;
+      }
+
+      @keyframes win {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin-top: 50px;
+      }
+
+      h1 {
+        font-size: 36px;
+      }
+
+      .board {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        width: 300px;
+        margin: 20px auto;
+      }
+
+      .cell {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100px;
+        border: 2px solid #000;
+        font-size: 48px;
+        font-weight: bold;
+        cursor: pointer;
+        background-color: #fff;
+        transition: background-color 0.3s ease;
+      }
+
+      .cell:hover {
+        background-color: #f5f5f5;
+      }
+
+      .win-cell {
+        background-color: #64b564;
+      }
+
+      .tie-cell {
+        background-color: #ff6464;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+      input[type="text"] {
+        padding: 5px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 10px;
+      }
+
+      .caption {
+        font-size: 14px;
+        color: #666;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Tic Tac Toe</h1>
+    <div>
+      <label for="player1">Player 1 Name:</label>
+      <input type="text" id="player1" placeholder="Player 1" />
+      <label for="player2">Player 2 Name:</label>
+      <input type="text" id="player2" placeholder="Player 2" />
+    </div>
+    <div class="board">
+      <div class="cell" onclick="makeMove(0)"></div>
+      <div class="cell" onclick="makeMove(1)"></div>
+      <div class="cell" onclick="makeMove(2)"></div>
+      <div class="cell" onclick="makeMove(3)"></div>
+      <div class="cell" onclick="makeMove(4)"></div>
+      <div class="cell" onclick="makeMove(5)"></div>
+      <div class="cell" onclick="makeMove(6)"></div>
+      <div class="cell" onclick="makeMove(7)"></div>
+      <div class="cell" onclick="makeMove(8)"></div>
+    </div>
+    <button onclick="restartGame()">Restart Game</button>
+    <p class="caption">Made by Beny Dishon</p>
+
+    <script>
+      // Define TicTacToe object
+      const TicTacToe = {
+        board: ["", "", "", "", "", "", "", "", ""],
+        currentPlayer: "X",
+        gameOver: false,
+        players: {
+          X: {
+            name: "Player 1",
+            symbol: "X",
+          },
+          O: {
+            name: "Player 2",
+            symbol: "O",
+          },
+        },
+
+        makeMove: function (position) {
+          if (this.board[position] === "" && !this.gameOver) {
+            this.board[position] = this.currentPlayer;
+            updateBoard();
+            this.checkWin(this.currentPlayer);
+            this.currentPlayer = this.currentPlayer === "X" ? "O" : "X";
+          }
+        },
+
+        checkWin: function (player) {
+          const winConditions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6],
+          ];
+
+          for (let i = 0; i < winConditions.length; i++) {
+            const [a, b, c] = winConditions[i];
+            if (
+              this.board[a] === player &&
+              this.board[b] === player &&
+              this.board[c] === player
+            ) {
+              this.gameOver = true;
+              const cells = document.querySelectorAll(".cell");
+              cells[a].classList.add("win-animation");
+              cells[b].classList.add("win-animation");
+              cells[c].classList.add("win-animation");
+              alert(`${this.players[player].name} wins!`);
+              return;
+            }
+          }
+
+          // Check for a tie
+          if (!this.board.includes("")) {
+            this.gameOver = true;
+            const cells = document.querySelectorAll(".cell");
+            cells.forEach((cell) => {
+              cell.classList.add("tie-cell");
+            });
+            alert("It's a tie!");
+          }
+        },
+      };
+
+      // Function to update the board display
+      function updateBoard() {
+        const cells = document.querySelectorAll(".cell");
+        for (let i = 0; i < TicTacToe.board.length; i++) {
+          cells[i].textContent = TicTacToe.board[i];
+        }
+      }
+
+      // Function to handle a player's move
+      function makeMove(position) {
+        TicTacToe.makeMove(position);
+      }
+
+      // Restart the game
+      function restartGame() {
+        TicTacToe.board = ["", "", "", "", "", "", "", "", ""];
+        TicTacToe.currentPlayer = "X";
+        TicTacToe.gameOver = false;
+        updateBoard();
+        const cells = document.querySelectorAll(".cell");
+        cells.forEach((cell) => {
+          cell.classList.remove("win-cell");
+          cell.classList.remove("tie-cell");
+          cell.classList.remove("win-animation");
+        });
+      }
+    </script>
+  </body>
+</html>
