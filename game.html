@@ -63,23 +63,26 @@
       }
 
       .win-cell {
-        animation: win-animation 0.5s ease-in-out infinite;
+        animation: win-animation 0.8s ease-in-out infinite;
       }
 
       .tie-cell {
-        background-color: #ff6666;
-        animation: tie-animation 1s infinite;
+        background-color: #ff8c00;
+        animation: tie-animation 1s linear infinite;
       }
 
       @keyframes tie-animation {
         0% {
-          opacity: 0.7;
+          transform: rotate(0deg) scale(1);
+          background-color: #ff8c00;
         }
         50% {
-          opacity: 1;
+          transform: rotate(180deg) scale(1.2);
+          background-color: #ffd700;
         }
         100% {
-          opacity: 0.7;
+          transform: rotate(360deg) scale(1);
+          background-color: #ff8c00;
         }
       }
 
@@ -168,7 +171,18 @@
             this.board[position] = this.currentPlayer;
             updateBoard();
             this.checkWin(this.currentPlayer);
-            this.currentPlayer = this.currentPlayer === "X" ? "O" : "X";
+            if (!this.board.includes("") && !this.gameOver) {
+              this.gameOver = true;
+              const cells = document.querySelectorAll(".cell");
+              cells.forEach((cell) => {
+                cell.classList.add("tie-cell");
+              });
+              setTimeout(() => {
+                alert("It's a tie!");
+              }, 1000);
+            } else {
+              this.currentPlayer = this.currentPlayer === "X" ? "O" : "X";
+            }
           }
         },
 
@@ -197,27 +211,15 @@
               cells[b].classList.add("win-cell");
               cells[c].classList.add("win-cell");
               setTimeout(() => {
-                cells[a].classList.add("win-animation");
-                cells[b].classList.add("win-animation");
-                cells[c].classList.add("win-animation");
-              }, 10);
+                cells[a].classList.remove("win-cell");
+                cells[b].classList.remove("win-cell");
+                cells[c].classList.remove("win-cell");
+              }, 800);
               setTimeout(() => {
                 alert(`${this.players[player].name} wins!`);
               }, 500);
               return;
             }
-          }
-
-          // Check for a tie
-          if (!this.board.includes("")) {
-            this.gameOver = true;
-            const cells = document.querySelectorAll(".cell");
-            cells.forEach((cell) => {
-              cell.classList.add("tie-cell");
-            });
-            setTimeout(() => {
-              alert("It's a tie!");
-            }, 500);
           }
         },
       };
@@ -244,7 +246,6 @@
         const cells = document.querySelectorAll(".cell");
         cells.forEach((cell) => {
           cell.classList.remove("win-cell");
-          cell.classList.remove("win-animation");
           cell.classList.remove("tie-cell");
         });
       }
