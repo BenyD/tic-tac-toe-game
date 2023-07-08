@@ -68,21 +68,21 @@
 
       .tie-cell {
         background-color: #ff8c00;
-        animation: tie-animation 2s ease-in-out infinite;
+        animation: tie-animation 1s ease-in-out infinite;
       }
 
       @keyframes tie-animation {
         0% {
-          background-color: #ff8c00;
-          box-shadow: 0 0 0 0 #ffd700;
+          transform: scale(1);
+          opacity: 1;
         }
         50% {
-          background-color: #ffd700;
-          box-shadow: 0 0 10px 5px #ffd700;
+          transform: scale(0.9);
+          opacity: 0.5;
         }
         100% {
-          background-color: #ff8c00;
-          box-shadow: 0 0 0 0 #ffd700;
+          transform: scale(1);
+          opacity: 1;
         }
       }
 
