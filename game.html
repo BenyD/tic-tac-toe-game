@@ -49,40 +49,40 @@
 
       @keyframes win-animation {
         0% {
-          transform: scale(1);
+          transform: scale(0.8);
           background-color: #f2f2f2;
         }
         50% {
-          transform: scale(1.2);
+          transform: scale(1.1);
           background-color: #85c47c;
         }
         100% {
-          transform: scale(1);
+          transform: scale(0.8);
           background-color: #f2f2f2;
         }
       }
 
       .win-cell {
-        animation: win-animation 0.8s ease-in-out infinite;
+        animation: win-animation 1.2s ease-in-out infinite;
       }
 
       .tie-cell {
         background-color: #ff8c00;
-        animation: tie-animation 1s linear infinite;
+        animation: tie-animation 2s ease-in-out infinite;
       }
 
       @keyframes tie-animation {
         0% {
-          transform: rotate(0deg) scale(1);
           background-color: #ff8c00;
+          box-shadow: 0 0 0 0 #ffd700;
         }
         50% {
-          transform: rotate(180deg) scale(1.2);
           background-color: #ffd700;
+          box-shadow: 0 0 10px 5px #ffd700;
         }
         100% {
-          transform: rotate(360deg) scale(1);
           background-color: #ff8c00;
+          box-shadow: 0 0 0 0 #ffd700;
         }
       }
 
@@ -170,8 +170,18 @@
           if (this.board[position] === "" && !this.gameOver) {
             this.board[position] = this.currentPlayer;
             updateBoard();
-            this.checkWin(this.currentPlayer);
-            if (!this.board.includes("") && !this.gameOver) {
+            const winPlayer = this.checkWin(this.currentPlayer);
+            if (winPlayer) {
+              this.gameOver = true;
+              const cells = document.querySelectorAll(".cell");
+              cells.forEach((cell) => {
+                cell.classList.remove("win-cell");
+              });
+              setTimeout(() => {
+                highlightWinCells(winPlayer);
+                alert(`${this.players[winPlayer].name} wins!`);
+              }, 500);
+            } else if (!this.board.includes("")) {
               this.gameOver = true;
               const cells = document.querySelectorAll(".cell");
               cells.forEach((cell) => {
@@ -205,22 +215,10 @@
               this.board[b] === player &&
               this.board[c] === player
             ) {
-              this.gameOver = true;
-              const cells = document.querySelectorAll(".cell");
-              cells[a].classList.add("win-cell");
-              cells[b].classList.add("win-cell");
-              cells[c].classList.add("win-cell");
-              setTimeout(() => {
-                cells[a].classList.remove("win-cell");
-                cells[b].classList.remove("win-cell");
-                cells[c].classList.remove("win-cell");
-              }, 800);
-              setTimeout(() => {
-                alert(`${this.players[player].name} wins!`);
-              }, 500);
-              return;
+              return player;
             }
           }
+          return null;
         },
       };
 
@@ -235,6 +233,34 @@
       // Function to handle a player's move
       function makeMove(position) {
         TicTacToe.makeMove(position);
+      }
+
+      // Function to highlight the winning cells
+      function highlightWinCells(player) {
+        const winConditions = [
+          [0, 1, 2],
+          [3, 4, 5],
+          [6, 7, 8],
+          [0, 3, 6],
+          [1, 4, 7],
+          [2, 5, 8],
+          [0, 4, 8],
+          [2, 4, 6],
+        ];
+        const cells = document.querySelectorAll(".cell");
+
+        for (let i = 0; i < winConditions.length; i++) {
+          const [a, b, c] = winConditions[i];
+          if (
+            TicTacToe.board[a] === player &&
+            TicTacToe.board[b] === player &&
+            TicTacToe.board[c] === player
+          ) {
+            cells[a].classList.add("win-cell");
+            cells[b].classList.add("win-cell");
+            cells[c].classList.add("win-cell");
+          }
+        }
       }
 
       // Restart the game
