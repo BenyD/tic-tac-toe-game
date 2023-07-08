@@ -3,29 +3,18 @@
   <head>
     <title>Tic Tac Toe</title>
     <style>
-      /* ... CSS styles ... */
-      .win-animation {
-        animation: win 1s ease-in-out infinite;
-      }
-
-      @keyframes win {
-        0%,
-        100% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.2);
-        }
-      }
-
       body {
         font-family: Arial, sans-serif;
         text-align: center;
-        margin-top: 50px;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
       }
 
       h1 {
         font-size: 36px;
+        margin-top: 50px;
+        color: #333;
       }
 
       .board {
@@ -33,7 +22,11 @@
         grid-template-columns: repeat(3, 1fr);
         gap: 10px;
         width: 300px;
-        margin: 20px auto;
+        margin: 0 auto 20px;
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       }
 
       .cell {
@@ -41,62 +34,104 @@
         justify-content: center;
         align-items: center;
         height: 100px;
-        border: 2px solid #000;
         font-size: 48px;
         font-weight: bold;
         cursor: pointer;
-        background-color: #fff;
+        background-color: #f2f2f2;
+        border: none;
+        border-radius: 5px;
         transition: background-color 0.3s ease;
       }
 
       .cell:hover {
-        background-color: #f5f5f5;
+        background-color: #e5e5e5;
+      }
+
+      @keyframes win-animation {
+        0% {
+          transform: scale(1);
+          background-color: #f2f2f2;
+        }
+        50% {
+          transform: scale(1.2);
+          background-color: #85c47c;
+        }
+        100% {
+          transform: scale(1);
+          background-color: #f2f2f2;
+        }
       }
 
       .win-cell {
-        background-color: #64b564;
+        animation: win-animation 0.5s ease-in-out infinite;
       }
 
       .tie-cell {
-        background-color: #ff6464;
+        background-color: #ff6666;
+        animation: tie-animation 1s infinite;
+      }
+
+      @keyframes tie-animation {
+        0% {
+          opacity: 0.7;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0.7;
+        }
       }
 
       button {
         padding: 10px 20px;
         font-size: 18px;
         font-weight: bold;
-        background-color: #4caf50;
+        background-color: #333;
         color: #fff;
         border: none;
+        border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s ease;
       }
 
       button:hover {
-        background-color: #45a049;
+        background-color: #555;
       }
-      input[type="text"] {
+
+      .caption {
+        font-size: 14px;
+        color: #888;
+        margin-top: 10px;
+      }
+
+      .player-input {
+        margin-top: 20px;
+      }
+
+      .player-input label {
+        display: inline-block;
+        width: 100px;
+        font-weight: bold;
+        color: #555;
+      }
+
+      .player-input input {
         padding: 5px;
         font-size: 16px;
         border: 1px solid #ccc;
         border-radius: 4px;
         margin-bottom: 10px;
       }
-
-      .caption {
-        font-size: 14px;
-        color: #666;
-        margin-top: 10px;
-      }
     </style>
   </head>
   <body>
     <h1>Tic Tac Toe</h1>
-    <div>
-      <label for="player1">Player 1 Name:</label>
-      <input type="text" id="player1" placeholder="Player 1" />
-      <label for="player2">Player 2 Name:</label>
-      <input type="text" id="player2" placeholder="Player 2" />
+    <div class="player-input">
+      <label for="player1">Player X Name:</label>
+      <input type="text" id="player1" value="Player X" />
+      <label for="player2">Player O Name:</label>
+      <input type="text" id="player2" value="Player O" />
     </div>
     <div class="board">
       <div class="cell" onclick="makeMove(0)"></div>
@@ -111,7 +146,6 @@
     </div>
     <button onclick="restartGame()">Restart Game</button>
     <p class="caption">Made by Beny Dishon</p>
-
     <script>
       // Define TicTacToe object
       const TicTacToe = {
@@ -120,11 +154,11 @@
         gameOver: false,
         players: {
           X: {
-            name: "Player 1",
+            name: "Player X",
             symbol: "X",
           },
           O: {
-            name: "Player 2",
+            name: "Player O",
             symbol: "O",
           },
         },
@@ -159,10 +193,17 @@
             ) {
               this.gameOver = true;
               const cells = document.querySelectorAll(".cell");
-              cells[a].classList.add("win-animation");
-              cells[b].classList.add("win-animation");
-              cells[c].classList.add("win-animation");
-              alert(`${this.players[player].name} wins!`);
+              cells[a].classList.add("win-cell");
+              cells[b].classList.add("win-cell");
+              cells[c].classList.add("win-cell");
+              setTimeout(() => {
+                cells[a].classList.add("win-animation");
+                cells[b].classList.add("win-animation");
+                cells[c].classList.add("win-animation");
+              }, 10);
+              setTimeout(() => {
+                alert(`${this.players[player].name} wins!`);
+              }, 500);
               return;
             }
           }
@@ -174,7 +215,9 @@
             cells.forEach((cell) => {
               cell.classList.add("tie-cell");
             });
-            alert("It's a tie!");
+            setTimeout(() => {
+              alert("It's a tie!");
+            }, 500);
           }
         },
       };
@@ -201,8 +244,8 @@
         const cells = document.querySelectorAll(".cell");
         cells.forEach((cell) => {
           cell.classList.remove("win-cell");
-          cell.classList.remove("tie-cell");
           cell.classList.remove("win-animation");
+          cell.classList.remove("tie-cell");
         });
       }
     </script>
