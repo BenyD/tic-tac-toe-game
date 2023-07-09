@@ -27,7 +27,7 @@ const TicTacToe = {
         });
         setTimeout(() => {
           highlightWinCells(winPlayer);
-          alert(`${this.players[winPlayer].name} wins!`);
+          showWinPopup(winPlayer);
         }, 500);
       } else if (!this.board.includes("")) {
         this.gameOver = true;
@@ -36,7 +36,7 @@ const TicTacToe = {
           cell.classList.add("tie-cell");
         });
         setTimeout(() => {
-          alert("It's a tie!");
+          showTiePopup();
         }, 1000);
       } else {
         this.currentPlayer = this.currentPlayer === "X" ? "O" : "X";
@@ -111,6 +111,32 @@ function highlightWinCells(player) {
   }
 }
 
+// Show win popup
+function showWinPopup(player) {
+  const winPopup = document.createElement("div");
+  winPopup.classList.add("popup");
+  winPopup.innerHTML = `
+    <div class="popup-content">
+      <h2>${TicTacToe.players[player].name} wins!</h2>
+      <button onclick="restartGame()">Play Again</button>
+    </div>
+  `;
+  document.body.appendChild(winPopup);
+}
+
+// Show tie popup
+function showTiePopup() {
+  const tiePopup = document.createElement("div");
+  tiePopup.classList.add("popup");
+  tiePopup.innerHTML = `
+    <div class="popup-content">
+      <h2>It's a tie!</h2>
+      <button onclick="restartGame()">Play Again</button>
+    </div>
+  `;
+  document.body.appendChild(tiePopup);
+}
+
 // Restart the game
 function restartGame() {
   TicTacToe.board = ["", "", "", "", "", "", "", "", ""];
@@ -121,5 +147,9 @@ function restartGame() {
   cells.forEach((cell) => {
     cell.classList.remove("win-cell");
     cell.classList.remove("tie-cell");
+  });
+  const popups = document.querySelectorAll(".popup");
+  popups.forEach((popup) => {
+    popup.remove();
   });
 }
