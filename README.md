@@ -1,4 +1,5 @@
 # Tic Tac Toe
+### Made by Beny Dishon
 
 ## Objective
 
