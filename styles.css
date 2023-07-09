@@ -1,0 +1,124 @@
+body {
+    font-family: "Poppins", sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+  }
+  
+  h1 {
+    font-size: 36px;
+    margin-top: 50px;
+    color: #333;
+  }
+  
+  .board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 300px;
+    margin: 0 auto 20px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    font-size: 48px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #f2f2f2;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .cell:hover {
+    background-color: #e5e5e5;
+  }
+  
+  @keyframes win-animation {
+    0% {
+      transform: scale(0.8);
+      background-color: #f2f2f2;
+    }
+    50% {
+      transform: scale(1.1);
+      background-color: #85c47c;
+    }
+    100% {
+      transform: scale(0.8);
+      background-color: #f2f2f2;
+    }
+  }
+  
+  .win-cell {
+    animation: win-animation 1.2s ease-in-out infinite;
+  }
+  
+  .tie-cell {
+    background-color: #ff8c00;
+    animation: tie-animation 1s ease-in-out infinite;
+  }
+  
+  @keyframes tie-animation {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(0.9);
+      opacity: 0.5;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  button {
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #555;
+  }
+  
+  .caption {
+    font-size: 14px;
+    color: #888;
+    margin-top: 10px;
+  }
+  
+  .player-input {
+    margin-top: 20px;
+  }
+  
+  .player-input label {
+    display: inline-block;
+    width: 100px;
+    font-weight: bold;
+    color: #555;
+  }
+  
+  .player-input input {
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  
